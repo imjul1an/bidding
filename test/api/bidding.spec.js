@@ -26,7 +26,6 @@ describe('bidding.spec.js', function () {
 	});
 
 	describe('When user access the auction room for specific item', function () {
-
 		beforeEach(function (done) {
 			request({url: url, json: true}, function (err, resp, body) {
 				response = resp;
@@ -39,7 +38,7 @@ describe('bidding.spec.js', function () {
 			expect(response.statusCode).to.equal(200);
 		});
 
-		it('shoud respond with a description of the current item', function () {
+		it('shoud respond with requested item id', function () {
 			expect(result.item.itemId).to.equal('ryrGV6');
 		});
 
