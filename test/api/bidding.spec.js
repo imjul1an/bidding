@@ -79,7 +79,7 @@ describe('bidding.spec.js', function () {
 		});
 	});
 
-	describe('When user wants to place a new bid', function () {
+	describe.only('When user wants to place a new bid', function () {
 		describe('and the bid is missed', function () {
 			beforeEach(function () {
 				payload = {};

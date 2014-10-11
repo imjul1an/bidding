@@ -38,7 +38,11 @@ function biddingService (app) {
 
 	function validateRequest(req, res, next) {
 		var body = req.body;
-		
+
+		if(!body || !body.bid) {
+			return next({message: 'missing bid', status: 400 });
+		}
+
 		next();
 	}
 }
