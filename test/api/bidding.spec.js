@@ -40,7 +40,7 @@ describe('bidding.spec.js', function () {
 			});
 		});
 
-		describe('and id is correct', function () {
+		describe('and id is ok', function () {
 			beforeEach(function () {
 				url = apiUrl + '/auction/' + 'ryrGV6';
 			});
@@ -100,6 +100,29 @@ describe('bidding.spec.js', function () {
 
 			it('should return 400 (Bad Request)', function (){
 				expect(response.statusCode).to.equal(400);
+			});
+		});
+
+		describe('and the bid is ok', function () {
+			beforeEach(function () {
+				payload = { bid: '50' };
+			});
+
+			beforeEach(function () {
+				url = apiUrl + '/auction/' + 'ryrGV6';
+			});
+
+			beforeEach(function (done) {
+				request.post({url: url, body: payload, json:true}, function (err, res, body) {
+					response = res;
+					body = body;
+					error = err;
+					done(err);
+				});
+			});
+
+			it('should return 201 (Created)', function () {
+				expect(response.statusCode).to.equal(201);
 			});
 		});
 	});
