@@ -8,7 +8,6 @@ module.exports = biddingService;
 
 function biddingService (app) {
 	app.get('/api/auction/:id',
-		validateRequest,
 		byId);
 
 	function byId (req, res, next) {
@@ -31,14 +30,5 @@ function biddingService (app) {
 
 			res.json(200, {item: extendWithHighestBid(item)});
 		});
-	}
-
-	function validateRequest (req, res, next) {
-		var id = req.params.id;
-		if(!id) {
-			return next({message: 'missing id', status: 400});
-		}
-
-		next();
 	}
 }
