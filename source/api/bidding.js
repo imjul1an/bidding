@@ -1,4 +1,5 @@
 "use strict";
+var _ = require('underscore');
 
 var items = require('../models/items');
 
@@ -22,7 +23,13 @@ function biddingService (app) {
 				return next ({message: "item cannot be found", status: 404});
 			}
 
-			res.json(200, {item: item});
+			function extendWithHighestBid(item) {
+				var highestBid = _.max(item.bids, function (bid) { return bid.bid; });
+				var ext =  { highestBid: highestBid };
+				return  _.extend(item, ext);
+			}
+
+			res.json(200, {item: extendWithHighestBid(item)});
 		});
 	}
 

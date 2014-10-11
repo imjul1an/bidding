@@ -1,3 +1,5 @@
+var moment = require('moment');
+
 var config = require('../config');
 var items = require('../source/models/items');
 
@@ -17,6 +19,35 @@ function clearCollection (callback) {
 
 function createTestItem (callback) {
 	var item = {
+		bids: [
+			{
+				date:moment().toDate(), bid: 5
+			},
+			{
+				date:moment().toDate(), bid: 14
+			},
+			{
+				date:moment().toDate(), bid: 23
+			},
+			{
+				date:moment().toDate(), bid: 45
+			},
+			{
+				date:moment().toDate(), bid: 13
+			},
+			{
+				date:moment().toDate(), bid: 2
+			},
+			{
+				date:moment().toDate(), bid: 8
+			},
+			{
+				date:moment().toDate(), bid: 32
+			},
+			{
+				date:moment().toDate(), bid: 12
+			}
+		],
 		itemId: 'ryrGV6',
 		name: 'watch',
 		description: 'This Jacques silver chronograph pocket watch with minute repetition was made in Switzerland around 1910.',

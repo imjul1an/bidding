@@ -13,7 +13,7 @@ module.exports = {
 };
 
 function create (item, callback) {
-	var ext =  { createdDate: moment().toDate(), bids: [{date:moment().toDate(), bid: 0}]};
+	var ext =  { createdDate: moment().toDate() };
 	item = _.extend(item, ext);
 	db.items.save(item, callback);
 }
