@@ -3,5 +3,5 @@
 module.exports = biddingService;
 
 function biddingService (app) {
-
+	
 }
