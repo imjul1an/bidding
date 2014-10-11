@@ -51,5 +51,5 @@ require('./source/api')(app);
 
 http.createServer(app).listen(app.get('port'), function() {
 	var env = process.env.NODE_ENV || 'development';
-	logger.info('Shorty app listening on port ' + app.get('port') + ' ' + env + ' mongo: ' + config.connection);
+	logger.info('Bidding app listening on port ' + app.get('port') + ' ' + env + ' mongo: ' + config.connection);
 });
