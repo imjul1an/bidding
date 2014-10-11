@@ -53,5 +53,9 @@ describe('bidding.spec.js', function () {
 		it('shoud respond with a description of the current item', function () {
 			expect(result.item.description).to.be.ok;
 		});
+
+		it.only('shoud respond with the current highest bid of the current item', function () {
+			expect(result.item.highestBid).to.be.ok;
+		});
 	});
 });
