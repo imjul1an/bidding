@@ -2,7 +2,7 @@ var request = require('request');
 var testUtils = require('../utils');
 
 describe('bidding.spec.js', function () {
-	var apiUrl, url, response, result;
+	var apiUrl, url, response, result, payload, error;
 
 	beforeEach(function () {
 		apiUrl = testUtils.getRootUrl() + '/api';
@@ -75,6 +75,31 @@ describe('bidding.spec.js', function () {
 
 			it('shoud respond with the current highest bid of the current item', function () {
 				expect(result.item.highestBid).to.be.ok;
+			});
+		});
+	});
+
+	describe('When user wants to place a new bid', function () {
+		describe('and the bid is missed', function () {
+			beforeEach(function () {
+				payload = {};
+			});
+
+			beforeEach(function () {
+				url = apiUrl + '/auction/' + 'ryrGV6';
+			});
+
+			beforeEach(function (done) {
+				request.post({url: url, body: payload, json:true}, function (err, res, body) {
+					response = res;
+					body = body;
+					error = err;
+					done(err);
+				});
+			});
+
+			it('should return 400 (Bad Request)', function (){
+				expect(response.statusCode).to.equal(400);
 			});
 		});
 	});
