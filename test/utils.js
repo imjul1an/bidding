@@ -28,24 +28,6 @@ function createTestItem (callback) {
 			},
 			{
 				date:moment().toDate(), bid: 23
-			},
-			{
-				date:moment().toDate(), bid: 45
-			},
-			{
-				date:moment().toDate(), bid: 13
-			},
-			{
-				date:moment().toDate(), bid: 2
-			},
-			{
-				date:moment().toDate(), bid: 8
-			},
-			{
-				date:moment().toDate(), bid: 32
-			},
-			{
-				date:moment().toDate(), bid: 12
 			}
 		],
 		itemId: 'ryrGV6',

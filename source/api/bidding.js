@@ -12,7 +12,7 @@ function biddingService (app) {
 
 	app.post('/api/auction/:id',
 		validateRequest,
-		byId);
+		placeBid);
 
 	function byId (req, res, next) {
 		var id = req.params.id;
@@ -44,5 +44,18 @@ function biddingService (app) {
 		}
 
 		next();
+	}
+
+	function placeBid(req, res, next) {
+		var bid = req.body.bid;
+		var id = req.params.id;
+
+		items.update(id, bid, function (err, updatedItem) {
+			if (err) {
+				return next({message: 'Failed to update item', err: err, status: 500 });
+			}
+
+			res.json(200, {item: updatedItem});
+		});
 	}
 }

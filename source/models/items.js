@@ -27,14 +27,14 @@ function clearCollection (callback) {
 }
 
 function update(itemId, bid, callback) {
-	db.items.update({itemId: itemId}, {$set: {lastBidUpdateDate: moment().toDate()}}, {multi: true}, function (err, count) {
+	db.items.update({itemId: itemId}, {$set: {lastPlacedBidDate: moment().toDate()}}, {multi: true}, function (err, count) {
 		if (err) {
 			return callback(err);
 		}
 
 		db.items.findAndModify({
 			query: {itemId: itemId},
-			update: {$inc: {redirectCount: 1}},
+			update: {$push: {bids: { date:moment().toDate(), bid: bid} } },
 			'new': true
 		}, callback);
 	});

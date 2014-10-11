@@ -8,14 +8,14 @@ describe('bidding.spec.js', function () {
 		apiUrl = testUtils.getRootUrl() + '/api';
 	});
 
-	before(function (done) {
+	beforeEach(function (done) {
 		testUtils.createTestItem(function(err, item) {
 			item = item;
 			done(err);
 		});
 	});
 
-	after(function (done) {
+	afterEach(function (done) {
 		testUtils.clearCollection(function (err) {
 			done(err);
 		});
@@ -79,7 +79,7 @@ describe('bidding.spec.js', function () {
 		});
 	});
 
-	describe.only('When user wants to place a new bid', function () {
+	describe('When user wants to place a new bid', function () {
 		describe('and the bid is missed', function () {
 			beforeEach(function () {
 				payload = {};
@@ -115,14 +115,22 @@ describe('bidding.spec.js', function () {
 			beforeEach(function (done) {
 				request.post({url: url, body: payload, json:true}, function (err, res, body) {
 					response = res;
-					body = body;
+					result = body;
 					error = err;
 					done(err);
 				});
 			});
 
-			it('should return 201 (Created)', function () {
-				expect(response.statusCode).to.equal(201);
+			it('should return 200 (Created)', function () {
+				expect(response.statusCode).to.equal(200);
+			});
+
+			it('should return last placed bid date', function () {
+				expect(result.item.lastPlacedBidDate).to.be.ok;
+			});
+
+			it('should return last placed bid date', function () {
+				expect(result.item.bids.length).to.equal(4);
 			});
 		});
 	});
