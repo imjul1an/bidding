@@ -1,7 +1,7 @@
 {
   "name": "bidding",
   "version": "1.0.0",
-  "description": "Shortner a new way of generating short version of huge link",
+  "description": "Bidding is a micro service made by github/julianusti",
   "main": "app.js",
   "dependencies": {
     "express": "^3.3.4",
