@@ -8,32 +8,41 @@ function biddingIoService (io) {
 	var clients = [];
 
 	io.sockets.on('connection', function (client) {
-
 		client.on('join',function(user){
 			clients[client.id] = { name: user , bid: 0};
+
+			console.log(clients[client.id] = { name: user , bid: 0});
 			io.sockets.emit('new:user', clients[client.id].name);
 		});
 
 		client.on('place:bid', function (bid) {
-			clients[client.id].bid = bid;
-			
-			client.broadcast.emit('last:bid', {
-				name: clients[client.id].name,
-				bid: clients[client.id].bid
-			});
+			// if (clients.length > 0 && validateBid()) {
+			// 	client.emit('error', 'You can place only higher bid!');
+			// } else {
+			// 	clients[client.id].bid = bid;
+			// 	client.emit('last:bid', {
+			// 		name: clients[client.id].name,
+			// 		bid: clients[client.id].bid
+			// 	});
+			// }
 
-			emitHighestBid(bid);
+			// broadcastHighestBid();
 
-			function emitHighestBid (bid) {
-				var highest = _.max(Object.keys(clients), function (id) { return +clients[id].bid; });
+			// function broadcastHighestBid () {
+			// 	var highest = _.max(_.values(clients), function (client) {return + client.bid});
 
-				if(bid > clients[highest].bid) {
-					io.sockets.emit('highest:bid', {
-						name: clients[client.id].name,
-						bid: clients[client.id].bid
-					});
-				}
-			}
+			// 	if(bid > highest.bid) {
+			// 		io.sockets.emit('highest:bid', {
+			// 			name: highest.name,
+			// 			bid: highest.bid
+			// 		});
+			// 	}
+			// }
+
+			// function validateBid () {
+			// 	return _.find(_.values(clients), function (client){ return client.bid === bid; });
+			// }
+
 		});
 	});
 }

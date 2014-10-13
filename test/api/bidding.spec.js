@@ -1,5 +1,12 @@
 var request = require('request');
 var testUtils = require('../utils');
+var io = require('socket.io-client');
+var socketURL = 'localhost:5000';
+
+var options = {
+	transports: ['websocket'],
+	'force new connection': true
+};
 
 describe('bidding.spec.js', function () {
 	var apiUrl, url, response, result, payload, error;
@@ -75,6 +82,41 @@ describe('bidding.spec.js', function () {
 
 			it('shoud respond with the current highest bid of the current item', function () {
 				expect(result.item.highestBid).to.be.ok;
+			});
+		});
+
+		describe('and user successfully connected to socket', function () {
+			var userName = '';
+
+			beforeEach(function () {
+				url = apiUrl + '/auction/' + 'ryrGV6';
+			});
+
+			beforeEach(function (done) {
+				request({url: url, json: true}, function (err, resp, body) {
+					response = resp;
+					result = body;
+					done(err);
+				});
+			});
+
+			beforeEach(function (done) {
+				var client1 = io.connect('http://127.0.0.1:5000');
+				client1.on('connect', function (data) {
+					client1.emit('join', 'Tom');
+				});
+
+				var client2 = io.connect('http://127.0.0.1:5000');
+				client2.on('new:user', function (name) {
+					userName = name;
+					client1.disconnect();
+					client2.disconnect();
+					done();
+				});
+			});
+
+			it('should broadcast new user to all connected users', function () {
+				expect(userName).to.equal('Tom');
 			});
 		});
 	});
