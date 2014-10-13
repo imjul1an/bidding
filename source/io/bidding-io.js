@@ -20,24 +20,23 @@ function biddingIoService (io) {
 				bid: clients[client.id].bid
 			});
 
+			broadcastHighestBid();
+
 			// if (clients.length > 0 && validateBid()) {
 			// 	client.emit('error', 'You can place only higher bid!');
 			// } else {
 			// 	clients[client.id].bid = bid;
 			// }
 
-			// broadcastHighestBid();
-
-			// function broadcastHighestBid () {
-			// 	var highest = _.max(_.values(clients), function (client) {return + client.bid});
-
-			// 	if(bid > highest.bid) {
-			// 		io.sockets.emit('highest:bid', {
-			// 			name: highest.name,
-			// 			bid: highest.bid
-			// 		});
-			// 	}
-			// }
+			function broadcastHighestBid () {
+				var highest = _.max(_.values(clients), function (client) {return + client.bid});
+				// if(bid > highest.bid) {
+					io.sockets.emit('highest:bid', {
+						name: highest.name,
+						bid: highest.bid
+					});
+				// }
+			}
 
 			// function validateBid () {
 			// 	return _.find(_.values(clients), function (client){ return client.bid === bid; });

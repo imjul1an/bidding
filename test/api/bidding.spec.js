@@ -128,8 +128,8 @@ describe('bidding.spec.js', function () {
 			});
 		});
 
-		describe('and user placed a bid on item, when no one is connected', function () {
-			var bidderName, bidderBid;
+		describe('and user placed a bid on an item, when he is alone in the auction room', function () {
+			var userName, userBid, highestUserName, highestUserBid;
 
 			beforeEach(function () {
 				url = apiUrl + '/auction/' + 'ryrGV6';
@@ -155,19 +155,32 @@ describe('bidding.spec.js', function () {
 				});
 
 				client.on('last:bid', function (lastBid) {
-					bidderName = lastBid.name;
-					bidderBid = lastBid.bid;
+					userName = lastBid.name;
+					userBid = lastBid.bid;
+				});
+
+				client.on('highest:bid', function (highestBid) {
+					highestUserName = highestBid.name;
+					highestUserBid = highestBid.bid;
 					client.disconnect();
 					done();
 				});
 			});
 
 			it('should return the bidder name', function () {
-				expect(bidderName).to.equal('Julian');
+				expect(userName).to.equal('Julian');
 			});
 
 			it('should return the bidder bid value', function () {
-				expect(bidderBid).to.equal(30);
+				expect(userBid).to.equal(30);
+			});
+
+			it('should return the highest bid equals to the one that user passed', function () {
+				expect(highestUserBid).to.equal(30);
+			});
+
+			it('should return the name of the highest bid user', function () {
+				expect(highestUserName).to.equal('Julian');
 			});
 		});
 	});
