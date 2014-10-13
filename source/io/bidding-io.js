@@ -15,18 +15,13 @@ function biddingIoService (io) {
 
 		client.on('place:bid', function (bid) {
 			clients[client.id].bid = bid;
+
 			client.emit('last:bid', {
 				name: clients[client.id].name,
 				bid: clients[client.id].bid
 			});
 
 			broadcastHighestBid();
-
-			// if (clients.length > 0 && validateBid()) {
-			// 	client.emit('error', 'You can place only higher bid!');
-			// } else {
-			// 	clients[client.id].bid = bid;
-			// }
 
 			function broadcastHighestBid () {
 				var highest = _.max(_.values(clients), function (client) {return + client.bid});
@@ -37,11 +32,11 @@ function biddingIoService (io) {
 					});
 				// }
 			}
+		});
 
-			// function validateBid () {
-			// 	return _.find(_.values(clients), function (client){ return client.bid === bid; });
-			// }
-
+		client.on('delete:users', function () {
+			clients = [];
+			console.log(clients);
 		});
 	});
 }
