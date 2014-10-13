@@ -10,8 +10,6 @@ function biddingIoService (io) {
 	io.sockets.on('connection', function (client) {
 		client.on('join',function(user){
 			clients[client.id] = { name: user , bid: 0};
-
-			console.log(clients[client.id] = { name: user , bid: 0});
 			io.sockets.emit('new:user', clients[client.id].name);
 		});
 
@@ -20,10 +18,10 @@ function biddingIoService (io) {
 			// 	client.emit('error', 'You can place only higher bid!');
 			// } else {
 			// 	clients[client.id].bid = bid;
-			// 	client.emit('last:bid', {
-			// 		name: clients[client.id].name,
-			// 		bid: clients[client.id].bid
-			// 	});
+			// client.emit('last:bid', {
+			// 	name: clients[client.id].name,
+			// 	bid: clients[client.id].bid
+			// });
 			// }
 
 			// broadcastHighestBid();

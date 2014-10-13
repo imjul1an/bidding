@@ -85,7 +85,7 @@ describe('bidding.spec.js', function () {
 			});
 		});
 
-		describe('and user successfully connected to socket', function () {
+		describe('and user successfully connected to the socket', function () {
 			var userName = '';
 
 			beforeEach(function () {
@@ -101,12 +101,20 @@ describe('bidding.spec.js', function () {
 			});
 
 			beforeEach(function (done) {
-				var client1 = io.connect('http://127.0.0.1:5000');
+				var client1 = io.connect('http://127.0.0.1:5000', {
+					'reconnection delay' : 0,
+					'reopen delay' : 0,
+					'force new connection' : true});
+
 				client1.on('connect', function (data) {
 					client1.emit('join', 'Tom');
 				});
 
-				var client2 = io.connect('http://127.0.0.1:5000');
+				var client2 = io.connect('http://127.0.0.1:5000', {
+					'reconnection delay' : 0,
+					'reopen delay' : 0,
+					'force new connection' : true});
+
 				client2.on('new:user', function (name) {
 					userName = name;
 					client1.disconnect();
@@ -117,6 +125,47 @@ describe('bidding.spec.js', function () {
 
 			it('should broadcast new user to all connected users', function () {
 				expect(userName).to.equal('Tom');
+			});
+		});
+
+		describe('and user placed a bid on item, when no one is connected', function () {
+			var bidderName, bidderBid;
+
+			beforeEach(function () {
+				url = apiUrl + '/auction/' + 'ryrGV6';
+			});
+
+			beforeEach(function (done) {
+				request({url: url, json: true}, function (err, resp, body) {
+					response = resp;
+					result = body;
+					done(err);
+				});
+			});
+
+			beforeEach(function (done) {
+				var client = io.connect('http://127.0.0.1:5000', {
+					'reconnection delay' : 0,
+					'reopen delay' : 0,
+					'force new connection' : true});
+
+				client.on('connect', function (data) {
+					client.emit('place:bid', 444);
+				});
+
+				client.on('last:bid', function (lastBid) {
+					bidderName = lastBid.name;
+					bidderBid = lastBid.bid;
+					done();
+				});
+			});
+
+			it('should return the bidder name', function () {
+				expect(bidderName).to.equal('Julian');
+			});
+
+			it('should return the bidder bid value', function () {
+				expect(bidderBid).to.equal(30);
 			});
 		});
 	});
