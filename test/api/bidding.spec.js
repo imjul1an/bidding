@@ -84,7 +84,9 @@ describe('bidding.spec.js', function () {
 				expect(result.item.highestBid).to.be.ok;
 			});
 		});
+	});
 
+	describe('When user playing on specific item', function () {
 		describe('and user successfully connected to the socket', function () {
 			var userName = '';
 
@@ -128,7 +130,7 @@ describe('bidding.spec.js', function () {
 			});
 		});
 
-		describe('and user placed a bid on an item, when he is alone in the auction room', function () {
+		describe('and user placed a bid on an item, when he is only one in auction room', function () {
 			var userName, userBid, highestUserName, highestUserBid;
 
 			beforeEach(function () {
@@ -183,9 +185,9 @@ describe('bidding.spec.js', function () {
 				expect(highestUserName).to.equal('Julian');
 			});
 		});
-	});
-
-	describe('When user wants to place a new bid', function () {
+	})
+	
+	describe('When user wants to place a new bid using RESR API', function () {
 		describe('and the bid is missed', function () {
 			beforeEach(function () {
 				payload = {};
