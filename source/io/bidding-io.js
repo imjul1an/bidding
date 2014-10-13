@@ -27,7 +27,7 @@ function biddingIoService (io) {
 			function emitHighestBid (bid) {
 				var highest = _.max(Object.keys(clients), function (id) { return +clients[id].bid; });
 
-				if(clients[highest].bid >= bid) {
+				if(bid > clients[highest].bid) {
 					io.sockets.emit('highest:bid', {
 						name: clients[client.id].name,
 						bid: clients[client.id].bid
