@@ -150,12 +150,14 @@ describe('bidding.spec.js', function () {
 					'force new connection' : true});
 
 				client.on('connect', function (data) {
-					client.emit('place:bid', 444);
+					client.emit('join', 'Julian');
+					client.emit('place:bid', 30);
 				});
 
 				client.on('last:bid', function (lastBid) {
 					bidderName = lastBid.name;
 					bidderBid = lastBid.bid;
+					client.disconnect();
 					done();
 				});
 			});

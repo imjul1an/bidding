@@ -14,14 +14,16 @@ function biddingIoService (io) {
 		});
 
 		client.on('place:bid', function (bid) {
+			clients[client.id].bid = bid;
+			client.emit('last:bid', {
+				name: clients[client.id].name,
+				bid: clients[client.id].bid
+			});
+
 			// if (clients.length > 0 && validateBid()) {
 			// 	client.emit('error', 'You can place only higher bid!');
 			// } else {
 			// 	clients[client.id].bid = bid;
-			// client.emit('last:bid', {
-			// 	name: clients[client.id].name,
-			// 	bid: clients[client.id].bid
-			// });
 			// }
 
 			// broadcastHighestBid();
