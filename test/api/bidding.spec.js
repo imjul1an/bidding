@@ -87,8 +87,8 @@ describe('bidding.spec.js', function () {
 	});
 
 	describe('When user playing on specific item', function () {
-		describe('and user successfully connected to the auction room', function () {
-			var userName, client1, client2;
+		describe('and I am the only bidder on an item', function () {
+			var userName, client1, client2, lastBidderName, lastBidderBid, highestBidderName, highestUserBid;
 
 			beforeEach(function () {
 				url = apiUrl + '/auction/' + 'ryrGV6';
@@ -108,18 +108,30 @@ describe('bidding.spec.js', function () {
 					'reopen delay' : 0,
 					'force new connection' : true});
 
+				client2 = io.connect('http://127.0.0.1:5000', {
+						'reconnection delay' : 0,
+						'reopen delay' : 0,
+						'force new connection' : true});
+
 				client1.on('connect', function (data) {
 					client1.emit('join', 'Tom');
+					client1.emit('place:bid', 45);
 				});
 
-				client2 = io.connect('http://127.0.0.1:5000', {
-					'reconnection delay' : 0,
-					'reopen delay' : 0,
-					'force new connection' : true});
+				client2.on('connect', function (data) {
+					client2.emit('join', 'Valdemar');
 
-				client2.on('new:user', function (name) {
-					userName = name;
-					done();
+					client2.on('last:bid', function (data) {
+						lastBidderBid = data.bid;
+						lastBidderName = data.name;
+					});
+
+					client2.on('highest:bid', function (data) {
+						highestUserBid = data.bid;
+						highestBidderName = data.name;
+						done();
+					});
+
 				});
 			});
 
@@ -130,12 +142,25 @@ describe('bidding.spec.js', function () {
 				done();
 			});
 
-			it('should broadcast new user to all connected users', function () {
-				expect(userName).to.equal('Tom');
+			it('should broadcast the latest bid that I have placed', function () {
+				expect(lastBidderBid).to.equal(45);
 			});
+
+			it('should broadcast my name - Tom as a last bidder', function () {
+				expect(lastBidderName).to.equal('Tom');
+			});
+
+			it('should broadcast my name - Tom as a highest bidder', function () {
+				expect(highestBidderName).to.equal('Tom');
+			});
+
+			it('should broadcast the - Tom as a highest bidder', function () {
+				expect(highestBidderName).to.equal('Tom');
+			});
+
 		});
 
-		describe('and user placed a bid on the item, when he is only one in the auction room', function () {
+		describe('and multiple users bidding on an item - I am the first', function () {
 			var userName, userBid, highestUserName, highestUserBid, client;
 
 			beforeEach(function () {
@@ -196,7 +221,7 @@ describe('bidding.spec.js', function () {
 			});
 		});
 
-		describe('and user placed a bid on the item, when there are a few users in the auction room, but he was a first bidder', function() {
+		describe('and multiple users bidding on an item - I am not the first', function() {
 			var userName, highestUserName, highestUserBid, client1, client2;
 
 			beforeEach(function () {
@@ -230,13 +255,12 @@ describe('bidding.spec.js', function () {
 
 				client2.on('connect', function (data) {
 					client2.emit('join', 'Julian');
+					client2.emit('place:bid', 25);
 				});
 				
 				client2.on('new:user', function (name) {
 					userName = name;
 				});
-
-				client2.emit('place:bid', 25);
 
 				client1.on('highest:bid', function (lastBid) {
 					highestUserName = lastBid.name;
@@ -266,6 +290,78 @@ describe('bidding.spec.js', function () {
 				expect(highestUserName).to.equal('Julian');
 			});
 		});
+
+		// xdescribe('and user placed a bid on the item, when there are a few users in the auction room, but he was not a first bidder', function() {
+		// 	var userName, highestUserName, highestUserBid, client1, client2;
+
+		// 	beforeEach(function () {
+		// 		url = apiUrl + '/auction/' + 'ryrGV6';
+		// 	});
+
+		// 	beforeEach(function (done) {
+		// 		request({url: url, json: true}, function (err, resp, body) {
+		// 			response = resp;
+		// 			result = body;
+		// 			done(err);
+		// 		});
+		// 	});
+
+		// 	beforeEach(function (done) {
+		// 		// Client 1
+		// 		client1 = io.connect('http://127.0.0.1:5000', {
+		// 			'reconnection delay' : 0,
+		// 			'reopen delay' : 0,
+		// 			'force new connection' : true});
+
+		// 		client1.on('connect', function (data) {
+		// 			client1.emit('join', 'Tom');
+		// 			client1.emit('place:bid', 100);
+		// 		});
+
+		// 		// Client 2
+		// 		client2 = io.connect('http://127.0.0.1:5000', {
+		// 			'reconnection delay' : 0,
+		// 			'reopen delay' : 0,
+		// 			'force new connection' : true});
+
+		// 		client2.on('connect', function (data) {
+		// 			client2.emit('join', 'Julian');
+		// 		});
+				
+		// 		client2.on('new:user', function (name) {
+		// 			userName = name;
+		// 		});
+
+		// 		client2.emit('place:bid', 25);
+
+		// 		client1.on('highest:bid', function (lastBid) {
+		// 			highestUserName = lastBid.name;
+		// 			highestUserBid = lastBid.bid;
+		// 			done();
+		// 		});
+		// 	});
+
+		// 	afterEach(function (done) {
+		// 		client1.emit('delete:users', '');
+
+		// 		client1.disconnect();
+		// 		client2.disconnect();
+
+		// 		done();
+		// 	});
+
+		// 	it('should detect a new user connected', function(){
+		// 		expect(userName).to.equal('Julian');
+		// 	});
+
+		// 	it('should broadcast the highest bid equal to 25', function () {
+		// 		expect(highestUserBid).to.equal(25);
+		// 	});
+
+		// 	it('should broadcast the user name of highest bidder equal to "Julian"', function () {
+		// 		expect(highestUserName).to.equal('Julian');
+		// 	});
+		// });
 	});
 
 	describe('When user wants to place a new bid using RESR API', function () {
