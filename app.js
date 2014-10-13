@@ -1,12 +1,15 @@
 "use strict";
 
-var http = require('http');
 var middleware = require('./source/middleware');
 var config = require('./config');
-
 var logger = require('./source/utils/logger');
+
+var http = require('http');
 var express = require('express');
 var app = express();
+var server = http.createServer(app);
+
+var io = require('socket.io')(server);
 
 var allowCrossDomain = function(req, res, next) {
 	res.header('Access-Control-Allow-Origin', req.headers.origin !== 'null' && req.headers.origin || '*');
@@ -47,9 +50,10 @@ app.configure('production', function() {
 	app.use(express.compress());
 });
 
+require('./source/io')(io);
 require('./source/api')(app);
 
-http.createServer(app).listen(app.get('port'), function() {
+server.listen(app.get('port'), function() {
 	var env = process.env.NODE_ENV || 'development';
 	logger.info('Bidding app listening on port ' + app.get('port') + ' ' + env + ' mongo: ' + config.connection);
 });

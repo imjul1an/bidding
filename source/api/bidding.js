@@ -1,12 +1,12 @@
 "use strict";
+
 var _ = require('underscore');
-
 var items = require('../models/items');
-
 
 module.exports = biddingService;
 
 function biddingService (app) {
+
 	app.get('/api/auction/:id',
 		byId);
 
