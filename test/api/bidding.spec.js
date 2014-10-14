@@ -1,12 +1,6 @@
 var request = require('request');
 var testUtils = require('../utils');
 var io = require('socket.io-client');
-var socketURL = 'localhost:5000';
-
-var options = {
-	transports: ['websocket'],
-	'force new connection': true
-};
 
 describe('bidding.spec.js', function () {
 	var apiUrl, url, response, result, payload, error;

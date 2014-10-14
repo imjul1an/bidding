@@ -12,7 +12,7 @@ Clone repo,
 $ git clone git@github.com:julianusti/bidding.git
 ```
 
-Make sure that Node.js is installed on your machine.
+Make sure that Node.js and Mongodb are installed on your machine.
 Run the command,
 
 ```bash
@@ -20,11 +20,14 @@ npm install
 ```
 it will install all dependencies which application use.
 
+Run the db/db.js script, to populate database with test item,
+```bash
+node db.js
+```
 Run the app,
 ```bash
 nodemon app.js
 ```
-
 Run the tests,
 ```bash
 npm test

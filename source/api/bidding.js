@@ -16,7 +16,7 @@ function biddingService (app) {
 
 	function byId (req, res, next) {
 		var id = req.params.id;
-
+		
 		items.findById(id, function (err, item) {
 			if (err) {
 				return next(err);
