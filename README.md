@@ -1,6 +1,6 @@
 # Bidding API
 
-Biddin API is a service that gives you ability to run auction on some specific item (book, car, toy etc.)
+Bidding API is a service that gives you ability to run auction on some specific item (book, car, toy etc.)
 This service doesn't use any kind of authentcation system. It is simple as is. It can only handle bids that you placing and
 show you the latest bids made by other users in real-time.
 
