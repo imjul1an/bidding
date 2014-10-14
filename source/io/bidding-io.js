@@ -21,22 +21,16 @@ function biddingIoService (io) {
 				bid: clients[socket.id].bid
 			});
 
-			broadcastHighestBid();
-
-			function broadcastHighestBid () {
-				var highest = _.max(_.values(clients), function (client) {return + client.bid});
-				//if(bid > highest.bid) {
-					io.sockets.emit('highest:bid', {
-						name: highest.name,
-						bid: highest.bid
-					});
-				//}
-			}
+			var highest = _.max(_.values(clients), function (client) {return + client.bid;});
+			io.sockets.emit('highest:bid', {
+				name: highest.name,
+				bid: highest.bid
+			});
 		});
 
 		socket.on('delete:users', function () {
 			clients = [];
-			console.log(clients);
+			console.log('cleared...');
 		});
 	});
 }

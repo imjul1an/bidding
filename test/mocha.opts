@@ -3,5 +3,5 @@
 --ui bdd
 --recursive
 --colors
---timeout 60000
+--timeout 90000
 --slow 300
