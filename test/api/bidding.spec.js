@@ -346,7 +346,7 @@ describe('bidding.spec.js', function () {
 				expect(result.item.lastPlacedBidDate).to.be.ok;
 			});
 
-			it('should return last placed bid date', function () {
+			it('should return placed bids equals to 4', function () {
 				expect(result.item.bids.length).to.equal(4);
 			});
 		});
